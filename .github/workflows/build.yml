@@ -16,13 +16,6 @@ jobs:
       - name: Inno Setup 6 설치
         run: choco install innosetup -y --no-progress
 
-      - name: 진단 (컴파일러 위치)
-        shell: pwsh
-        run: |
-          Get-ChildItem "C:\Program Files\Microsoft Visual Studio" -ErrorAction SilentlyContinue | ForEach-Object { "VS: " + $_.FullName }
-          Get-ChildItem "C:\Program Files\Microsoft Visual Studio" -Recurse -Filter csc.exe -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { "CSC: " + $_.FullName }
-          Get-ChildItem "C:\Program Files\dotnet\sdk" -Recurse -Filter csc.dll -ErrorAction SilentlyContinue | Select-Object -First 3 | ForEach-Object { "DOTNET: " + $_.FullName }
-
       - name: 빌드 (release.bat)
         shell: cmd
         run: call release.bat
