@@ -1,7 +1,12 @@
 ﻿# 몽볼륨 빌드: Visual Studio 의 Roslyn 컴파일러 + .NET Framework 4.x WPF 어셈블리 사용 (SDK 불필요)
 param([string]$OutDir = "$PSScriptRoot\bin")
 $ErrorActionPreference = 'Stop'
-$csc = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe"
+$csc = $null
+foreach ($ed in "Community", "Professional", "Enterprise", "BuildTools") {
+    $c = "C:\Program Files\Microsoft Visual Studio\2022\$ed\MSBuild\Current\Bin\Roslyn\csc.exe"
+    if (Test-Path $c) { $csc = $c; break }
+}
+if (-not $csc) { $csc = "$env:WINDIR\Microsoft.NET\Framework64\v4.0.30319\csc.exe" }
 $fw = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
 $wpf = "$fw\WPF"
 New-Item -ItemType Directory -Force $OutDir | Out-Null
