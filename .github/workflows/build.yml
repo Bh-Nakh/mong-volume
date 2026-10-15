@@ -16,6 +16,14 @@ jobs:
       - name: Inno Setup 6 설치
         run: choco install innosetup -y --no-progress
 
+      - name: 진단 (컴파일러 위치)
+        shell: pwsh
+        run: |
+          $vs = "C:Program FilesMicrosoft Visual Studio�2"
+          if (Test-Path $vs) { Get-ChildItem $vs | ForEach-Object { $_.Name } } else { "VS 2022 없음" }
+          Get-ChildItem "C:Program FilesMicrosoft Visual Studio" -Recurse -Filter csc.exe -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { $_.FullName }
+          Get-ChildItem "C:Program Filesdotnetsdk" -Recurse -Filter csc.dll -ErrorAction SilentlyContinue | Select-Object -First 3 | ForEach-Object { $_.FullName }
+
       - name: 빌드 (release.bat)
         shell: cmd
         run: call release.bat
